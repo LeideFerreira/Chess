@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         
+        <title>Express + HBS!</title>
+    </head>
+    <body>
+        {{message}}
+    </body>
+    <div class="container">
+        <h1>Olá {{username}},seja bem vindo!</h1>
+        <img src="/img/print.png" width="300" height="300" alt=""/> 
+        {{#if isRyan}}
+            <p>Obrigado Ryan, pelo Node.js!</p>
+        {{else}}
+            <p>Você não é o Ryan, não tenho nada pra te agradecer!</p>
+        {{/if}}
+    </div>
+    
+</html>
