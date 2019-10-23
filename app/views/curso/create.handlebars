@@ -1,0 +1,26 @@
+  <form action="/curso/create" method="post">
+      <h1>Adicionar Curso</h1>
+  <fieldset>
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <input type="text" readonly="" class="form-control-plaintext" id="staticEmail">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Sigla</label>
+      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" name="sigla">
+      <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Nome</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="" name="nome">
+    </div>
+   
+    <div class="form-group">
+      <label for="exampleTextarea">Descrição</label>
+      <textarea class="form-control" id="exampleTextarea" rows="3" name="descricao"></textarea>
+    </div>
+    </fieldset>
+    <button type="submit" value="Enviar" class="btn btn-primary">Submit</button>
+  </fieldset>
+</form>

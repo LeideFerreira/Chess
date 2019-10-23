@@ -6,5 +6,5 @@ const index = async (req, res) => {
         areas: areas,
     });
 };
-
+ 
 module.exports = { index }

@@ -3,6 +3,7 @@ const router = require("./config/routes");
 
 //var consign =  require('consign');
 var app = express();
+app.use(express.urlencoded({extended: false}));
 app.use(router);
 
 
