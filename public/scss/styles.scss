@@ -1,4 +1,11 @@
 $color: red;
 div{
-    color: blue;
+    color:$color;
 }  
+
+$primary-color: #222;
+
+body {
+  background: $primary-color;
+  color: $primary-color;
+}
