@@ -4,19 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <link href="/css/main.css" , rel="stylesheet">
+
   <title>My Chess App</title>
 </head>
 
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+<body class="">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <img src="img/chess.png" width="30" height="30" alt=""> 
+    <a class="navbar-brand" href="#">  Chess App</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarColor02">
+  <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      {{!-- <li class="nav-item active">
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
@@ -27,16 +29,41 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">About</a>
-      </li>
+      </li> --}}
     </ul>
-    <form class="form-inline my-2 my-lg-0">
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+  <button type="button" class="btn btn-primary">Jogar</button>
+  <div class="btn-group" role="group">
+    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      {{!-- <a class="dropdown-item" href="#">Dropdown link</a>
+      <a class="dropdown-item" href="#">Dropdown link</a> --}}
+    </div>
+  </div>
+</div>
+    {{!-- <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form> --}}
   </div>
 </nav>
-  </nav>
-  {{{body}}}
+
+  <div class="container">
+    {{{body}}}
+    {{!-- <footer id="footer">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Made by Leide</p>
+          <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/master/LICENSE">MIT
+              License</a>.</p>
+          <p>Based on <a href="https://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a
+              href="https://fontawesome.com/" rel="nofollow">Font Awesome</a>. Web fonts from <a
+              href="https://fonts.google.com/" rel="nofollow">Google</a>.</p>
+
+        </div>
+      </div>
+    </footer> --}}
+  </div>
   <script src="/js/jquery.min.js"></script>
   <script src="/js/popper.js"></script>
   <script src="/js/bootstrap.min.js"></script>

@@ -1,11 +1,9 @@
-$color: red;
+$colorDiv: white;
+$colorBack: #222;
 div{
-    color:$color;
+    color:$colorDiv;
 }  
 
-$primary-color: #222;
-
-body {
-  background: $primary-color;
-  color: $primary-color;
+body{
+    background-color: $colorBack !important;
 }
