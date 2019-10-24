@@ -1,11 +1,12 @@
 var express = require('express');
 const router = require("./config/routes");
+const cookieParser = require('cookie-parser');
 
 //var consign =  require('consign');
 var app = express();
 app.use(express.urlencoded({extended: false}));
 app.use(router);
-
+app.use(cookieParser());
 
 app.use(express.static('/public')); //pegar imagens
 //Handlebars ------ expbs eh a funcao handlbars do slide do profeessor

@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'area'
   });
   Area.associate = function(models) {
-    // associations can be defined here
+    Area.hasMany(models.curso,{
+      foreignKey: 'id_area'
+    });//um pra muitos
   };
   return Area;
 }; 

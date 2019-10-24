@@ -9,7 +9,17 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   User.associate = function(models) {
-    // associations can be defined here
+    User.belongsTo(models.curso,{
+      foreignKey: 'id_curso'
+    });
+    User.hasMany(models.mensagem,{
+      foreignKey: 'id_user'
+    });
+    User.hasMany(models.partida,{
+      foreignKey: 'id_user_1',
+      foreignKey: 'id_user_2',
+      foreignKey: 'winner'
+    });
   };
   return User;
 };

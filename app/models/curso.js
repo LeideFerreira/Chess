@@ -19,7 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'curso',
   });
   Curso.associate = function(models) {
-    // associations can be defined here
+    Curso.belongsTo(models.area,{
+      foreignKey: 'id_area'
+    });
+    Curso.hasMany(models.user,{
+      foreignKey: 'id_curso'
+    });
   };
   return Curso;
 };
