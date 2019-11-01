@@ -13,5 +13,10 @@ const about = (req, res) => {
         layout:'main'
     });
 };
+const socket = (req, res)=>{
+    res.render('main/socket',{
+        layout:''
+    })
+}
 
-module.exports = { index, about }
+module.exports = { socket,index, about }

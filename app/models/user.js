@@ -7,9 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     id_curso: DataTypes.INTEGER
   }, {
     underscored: true,
+    tableName: 'user'
   });
   User.associate = function(models) {
     User.belongsTo(models.curso,{
+      as: 'curso',
       foreignKey: 'id_curso'
     });
     User.hasMany(models.mensagem,{

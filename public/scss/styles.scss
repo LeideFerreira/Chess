@@ -1,7 +1,7 @@
 $colorDiv: white;
 $colorBack: #222;
 div{
-    color:$colorDiv;
+    color:$colorDiv !important;
 }  
 
 body{
@@ -15,4 +15,7 @@ form {
     padding: 1em;
     border: 1px solid #CCC;
     //border-radius: 1em;
+}
+fieldset{
+    color:$colorDiv !important;
 }

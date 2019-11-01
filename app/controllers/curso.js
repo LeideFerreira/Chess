@@ -27,8 +27,8 @@ const read = async function (req, res) {
 //             id_area: req.body.area,
 //         });
 
-//     }
-// }
+//     } 
+// } 
 const create = async (req, res) => {
     if (req.route.methods.get) {
         res.render('curso/create');
@@ -38,7 +38,8 @@ const create = async (req, res) => {
         } catch (e) {
             res.render('curso/create', {
                 curso: req.body,
-                errors: error.errors
+                errors: error.errors,
+                csrf: req.csrfToken()
             });
         }
         res.redirect('/curso');
