@@ -1,6 +1,6 @@
 var models = require('../models/index');
 var Curso = models.curso;
-
+var Area = models.area;
 const index = async (req, res) => {
     const cursos = await Curso.findAll();
     res.render('curso/index', {
@@ -15,31 +15,26 @@ const read = async function (req, res) {
     res.end(cursoId);
 };
 
-//const create = (req, res) => {};
-// const create = async function (req, res) {
-//     if (req.route.methods.get) {
-//         res.render('curso/create');
-//     } else {
-//         curso = await Curso.create({
-//             sigla: req.body.sigla,
-//             nome: req.body.nome,
-//             descricao: req.body.descricao,
-//             id_area: req.body.area,
-//         });
-
-//     } 
-// } 
 const create = async (req, res) => {
+    const areas = await Area.findAll();
+    const token = req.csrfToken();
+    console.log(token);
     if (req.route.methods.get) {
-        res.render('curso/create');
+        res.render('curso/create',{
+            curso: req.body,
+            areas: areas,
+            token: token
+        });
     } else {
         try {
             await Curso.create(req.body);
         } catch (e) {
+            const error = new Error(e);
             res.render('curso/create', {
                 curso: req.body,
+                areas: areas,
                 errors: error.errors,
-                csrf: req.csrfToken()
+                token: token
             });
         }
         res.redirect('/curso');

@@ -1,9 +1,11 @@
+<h1>Criar Conta</h1>
+<h6>Deseja criar uma conta? Basta preencher o formulário abaixo.</h6>
 <form action="/user/create" method="post">
-    <h1>Criar Conta</h1>
     <fieldset>
         <div class="form-group">
             <label for="exampleInputPassword1">Nome Completo</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="João Guimaraes" name="nome" value="{{user.nome}}">
+            <input type="text" class="form-control" id="exampleInputPassword1" aria-describedby="nameHelp" placeholder="João Guimaraes" name="nome" value="{{user.nome}}">
+            <div class="invalid-feedback">Deu erro</div>
         </div>
         <div class="form-group">
       <label for="exampleInputPassword1">Password</label>
@@ -23,7 +25,7 @@
       </select>
     </div>
     </fieldset>      
-    <input type="hidden" name="_csrf" value="{{csrf}}">
-    <button type="submit" value="Enviar" class="btn btn-primary">Submit</button>
+    <input type="hidden" name="_csrf" value="{{token}}">
+    <button type="submit" value="Enviar" class="bbtn btn-primary btn-lg">Criar Conta</button>
     </fieldset>
 </form>

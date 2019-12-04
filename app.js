@@ -11,21 +11,26 @@ var app = express();
 // const PORT = process.env.PORT ||3000;
 
 app.use(express.urlencoded({ extended: false }));
-app.use(router);
 app.use(cookieParser());
-app.use(csrf({ cookie: true }));
+app.use(csrf({ cookie: true}));
+
+app.use(function (req, res, next) {
+  var token = req.csrfToken();
+  res.cookie('XSRF-TOKEN', token);
+  res.locals.csrfToken = token;
+  next();
+});
+
+app.use(router);
 app.use(express.static('/public')); //pegar imagens
 
 
 
 //cookies 
-app.get('/', function (req, res) {
-  if (!('nome' in req.cookies)) {
-    res.cookie('nome', 'valor');
-    res.send('Você NUNCA passou por aqui!');
-  } else {
-    res.send('Você JÁ passou por aqui');
-  }
+app.get('/mostra', function (req, res) {
+  console.log('Cookies: ', req.cookies)
+  console.log("Token: ",req.csrfToken());
+
 });
 
 app.get('/apaga_cookie', function(req, res){
@@ -66,18 +71,6 @@ app.use(sassMiddleware({
   express.static(path.join(__dirname, 'public'))
 )
 
-
-// io.on('connection', function(client) {
-//   console.log('Novo usuário conectado!');
-//   client.on('disconnect', function() {
-//   console.log('Usuário desconectado');
-//   })
-// ;}
-// );
-
-// http.listen(PORT, function () {
-//   console.log("Ouvindo a porta "+ PORT)
-// });
 app.listen(8080, function () {
   console.log("Express app iniciada na porta 8080.");
 });

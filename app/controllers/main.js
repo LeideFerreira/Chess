@@ -1,7 +1,6 @@
 const index = (req, res) => {
     const conteudo = 'Página principal da aplicação';
     res.render('main/index', {
-        
         conteudo: conteudo,
         layout:'main'
     });
@@ -19,4 +18,8 @@ const socket = (req, res)=>{
     })
 }
 
-module.exports = { socket,index, about }
+const siginup = (req,res)=>{
+    res.redirect('user/create');
+}
+
+module.exports = { socket,index, about ,siginup}

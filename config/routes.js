@@ -10,6 +10,7 @@ router.get('/', mainController.index);
 router.get('/about',mainController.about);
 router.get('/socket',mainController.socket);
 
+
 //areaController
 router.get('/area',areaController.index);
 
@@ -26,6 +27,8 @@ router.post('/curso/remove/:id',cursoController.remove);
 router.get('/user',userController.index);
 router.get('/user/create',userController.create);
 router.post('/user/create',userController.create);
+router.get('/siginup',userController.create);
+router.post('/siginup',userController.create);
 
 
 module.exports = router;

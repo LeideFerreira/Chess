@@ -19,48 +19,6 @@ const read = async function (req, res) {
     res.end(userId);
 };
 
-// const create = (req, res) => {};
-// const create = async function (req, res) {
-//     if (req.route.methods.get) {
-//         res.render('user/create');
-//     } else {
-//         user = await User.create({
-//             nome: req.body.nome,
-//             senha: req.body.senha,
-//             email: req.body.email,
-//             id_curso: req.body.curso,
-            
-//         });
-//         res.redirect('/user');
-//     } 
-// } 
-
-const create = async (req, res) => {
-    const cursos = await Curso.findAll();
-    if (req.route.methods.get) {
-        res.render('user/create',{
-            cursos:cursos
-        });
-        console.log("Entrou aqui1");
-    } else {
-        try {
-            await User.create(req.body);     
-        } catch (e) {
-            console.log("Entrou aqui");
-            res.render('user/create', { 
-                user: req.body,
-                cursos: cursos,
-                errors: error.errors,
-                csrf: req.csrfToken()
-            });
-        }
-        res.redirect('/user');
-    }
-};
-// include: [{
-//     model: Curso,
-//     as: 'curso'
-// }],
 const showError = function (errors, field) {
     var mensagem;
     if (typeof errors != 'undefined') {
@@ -73,5 +31,33 @@ const showError = function (errors, field) {
         return mensagem;
     }
 }
+
+const create = async (req, res) => {
+    const cursos = await Curso.findAll();
+    const token = req.csrfToken(); 
+    console.log(token);
+    if (req.route.methods.get) {
+        res.render('user/create',{
+            cursos:cursos,
+            token:token
+        });
+    } else {
+        try {
+            await User.create(req.body);     
+        } catch (e) {
+            const error = new Error(e);
+            console.log(e);
+            res.render('user/create', { 
+                user: req.body,
+                cursos: cursos,
+                errors: error.errors,
+                token:token
+            });
+            return;
+        }
+        res.redirect('/user');
+    }
+};
+
 module.exports = {index, read, create, update, remove, showError }
 
