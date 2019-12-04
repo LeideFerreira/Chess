@@ -48,16 +48,19 @@ const create = async (req, res) => {
 };
 const update = (req, res) => { };
 const remove = (req, res) => { };
+
 const showError = function (errors, field) {
     var mensagem;
     if (typeof errors != 'undefined') {
-    errors.forEach(function (error) {
+        errors.forEach(function (error) {
     if (error.path == field) {
-    mensagem = error.message;
-    return;
+        mensagem = error.message;
+        return;
     }
     });
-    return mensagem;
+     return mensagem;
     }
-    }
+  }
+
+  
 module.exports = { index, read, create, update, remove,showError }

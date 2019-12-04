@@ -23,7 +23,7 @@ router.post('/curso/update/:id',cursoController.update);
 router.post('/curso/remove/:id',cursoController.remove);
 
 //userController
-router.use('/user',userController.index);
+router.get('/user',userController.index);
 router.get('/user/create',userController.create);
 router.post('/user/create',userController.create);
 
