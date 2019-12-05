@@ -3,6 +3,7 @@ const router = require("./config/routes");
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 
+
 //var consign =  require('consign');
 var app = express();
 // const http = require('http').createServer(app);
@@ -41,6 +42,7 @@ app.get('/apaga_cookie', function(req, res){
 //Handlebars ------ expbs eh a funcao handlbars do slide do profeessor
 const expbs = require('express-handlebars');
 app.engine('handlebars', expbs({
+  helpers: require(__dirname + '/app/views/helpers/helpers.js'),
   layoutsDir: __dirname + '/app/views/layouts',
   defaultLayout: 'main',
 }));

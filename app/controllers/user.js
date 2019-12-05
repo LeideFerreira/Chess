@@ -1,4 +1,6 @@
 var models = require('../models/index');
+const bcrypt = require('bcryptjs');
+
 var User = models.user;
 var Curso = models.curso;
 
@@ -19,45 +21,42 @@ const read = async function (req, res) {
     res.end(userId);
 };
 
-const showError = function (errors, field) {
-    var mensagem;
-    if (typeof errors != 'undefined') {
-        errors.forEach(function (error) {
-            if (error.path == field) {
-                mensagem = error.message;
-                return;
-            }
-        });
-        return mensagem;
-    }
-}
 
 const create = async (req, res) => {
     const cursos = await Curso.findAll();
-    const token = req.csrfToken(); 
-    console.log(token);
-    if (req.route.methods.get) {
-        res.render('user/create',{
-            cursos:cursos,
-            token:token
+    
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(req.body.senha, salt, async (err, hash) => {
+            if (req.route.methods.get) {
+               res.render('user/create',{
+                   cursos:cursos
+               });
+            } else {
+                try {
+                    await User.create({
+                        nome: req.body.nome,
+                        email: req.body.email,
+                        senha: hash,
+                        cursos:cursos,
+                        id_curso: req.body.cursos,
+                     
+                    });
+                } catch (e) {
+                    const error = new Error(e);
+                    res.render('user/create', {
+                        user: req.body,
+                        // cursos: cursos,
+                        // senha: hash,
+                        errors: error.errors,
+                      
+                    });
+                    return;
+                }
+                res.redirect('/user');
+            }
         });
-    } else {
-        try {
-            await User.create(req.body);     
-        } catch (e) {
-            const error = new Error(e);
-            console.log(e);
-            res.render('user/create', { 
-                user: req.body,
-                cursos: cursos,
-                errors: error.errors,
-                token:token
-            });
-            return;
-        }
-        res.redirect('/user');
-    }
+    });
 };
 
-module.exports = {index, read, create, update, remove, showError }
+module.exports = { index, read, create, update, remove }
 
