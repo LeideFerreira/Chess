@@ -1,6 +1,7 @@
 var models = require('../models/index');
 const bcrypt = require('bcryptjs');
 
+
 var User = models.user;
 var Curso = models.curso;
 
@@ -21,36 +22,36 @@ const read = async function (req, res) {
     res.end(userId);
 };
 
-
 const create = async (req, res) => {
     const cursos = await Curso.findAll();
+    const token = req.csrfToken()
     
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(req.body.senha, salt, async (err, hash) => {
             if (req.route.methods.get) {
+               console.log("Tá no GET");
                res.render('user/create',{
-                   cursos:cursos
+                   cursos:cursos, //pra selecionar o curso
+                   csrf: token
                });
             } else {
                 try {
+                    console.log("Ta no Try");
                     await User.create({
                         nome: req.body.nome,
                         email: req.body.email,
                         senha: hash,
                         cursos:cursos,
-                        id_curso: req.body.cursos,
-                     
+                        id_curso: req.body.id_curso
                     });
                 } catch (e) {
-                    const error = new Error(e);
+                    console.log("Ta no Catch")
                     res.render('user/create', {
-                        user: req.body,
-                        // cursos: cursos,
-                        // senha: hash,
-                        errors: error.errors,
-                      
+                        cursos:cursos,
+                        errors: e.errors,
+                        csrf: token
                     });
-                    return;
+                return;
                 }
                 res.redirect('/user');
             }
@@ -59,4 +60,3 @@ const create = async (req, res) => {
 };
 
 module.exports = { index, read, create, update, remove }
-

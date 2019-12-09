@@ -1,10 +1,10 @@
 
-const toLower = function(value) {
-        return value.toLowerCase();
-        }
-        const toUpper = function(value) {
-        return value.toUpperCase();
-        }
+const toLower = function (value) {
+    return value.toLowerCase();
+}
+const toUpper = function (value) {
+    return value.toUpperCase();
+}
 const showError = function (errors, field) {
     var mensagem;
     if (typeof errors != 'undefined') {
@@ -18,4 +18,4 @@ const showError = function (errors, field) {
     }
 }
 
-module.exports = { toLower, toUpper ,showError};
+module.exports = { toLower, toUpper, showError };

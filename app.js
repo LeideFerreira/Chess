@@ -2,7 +2,7 @@ var express = require('express');
 const router = require("./config/routes");
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
-
+var uuid = require('uuid');
 
 //var consign =  require('consign');
 var app = express();
@@ -14,24 +14,11 @@ var app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(csrf({ cookie: true}));
-
-app.use(function (req, res, next) {
-  var token = req.csrfToken();
-  res.cookie('XSRF-TOKEN', token);
-  res.locals.csrfToken = token;
-  next();
-});
-
 app.use(router);
 app.use(express.static('/public')); //pegar imagens
-
-
-
-//cookies 
-app.get('/mostra', function (req, res) {
-  console.log('Cookies: ', req.cookies)
-  console.log("Token: ",req.csrfToken());
-
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 app.get('/apaga_cookie', function(req, res){

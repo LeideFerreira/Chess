@@ -6,13 +6,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: {
-          args: [5, 40],
-          msg: 'O nome precisa ter entre 5 e 40 caracteres.'
+          args: [4,40],
+          msg: 'O nome precisa ter entre 4 e 40 caracteres.'
         }
       }
     },
     email: DataTypes.STRING,
-    senha: DataTypes.STRING,
+    senha: {
+      type:DataTypes.STRING,
+      allowNull: false,
+    },
     id_curso: DataTypes.INTEGER
   }, {
     underscored: true,
