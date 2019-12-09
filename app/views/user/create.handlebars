@@ -1,32 +1,47 @@
-<h1>Criar Conta</h1>
-<h6>Deseja criar uma conta? Basta preencher o formulário abaixo.</h6>
-<form action="/user/create" method="post">
-  <fieldset>
-      <label for="nome">Nome</label>
-          <input type="text" class="form-control" name="nome" value="{{user.nome}}">      
-      <div class="invalid-feedback d-block">{{showError errors 'nome'}}</div>
-   
-    <div class="form-group">
-      <label for="senha">Senha</label>
-      <input type="password" class="form-control" id="senha" name="senha">
-      <div class="invalid-feedback d-block">{{showError errors 'senha'}}</div>
+<div id="signup" class="bs-docs-section">
+  <div class="row">
+    <div class="col-lg-6">
+      <h1 class="text-center">Criar conta</h1>
+      <div class="signup-form">
+        <p class="text-center">
+          Deseja criar uma conta? Basta preencher o formulário abaixo.
+        </p>
+        <hr>
+        <form action="/user/create" method="post">
+          <fieldset>
+            <label for="nome">Nome Completo</label>
+            <input type="text" class="form-control" name="nome" value="{{user.nome}}">
+            <div class="invalid-feedback d-block">{{showError errors 'nome'}}</div>
 
-    </div>
+            <div class="form-group">
+              <label for="email">Endereço de E-mail</label>
+              <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
+                name="email">
+            </div>
 
-    <div class="form-group">
-      <label for="email">Endereço de E-mail</label>
-      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
-        name="email">
+            <div class="form-group">
+              <label for="senha">Escolha uma senha de acesso</label>
+              <input type="password" class="form-control" id="senha" name="senha">
+              <div class="invalid-feedback d-block">{{showError errors 'senha'}}</div>
+
+            </div>
+
+            <div class="form-group">
+              <label for="curso">Qual o seu curso na UFAM</label>
+              <select class="form-control" id="curso" name="id_curso" value="{{user.id_curso}}">
+                {{#each cursos}}
+                <option value="{{id}}">{{nome}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <input type="hidden" name="_csrf" value="{{csrf}}">
+            <button type="submit" value="Enviar" class="bbtn btn-primary btn-lg">Criar Conta</button>
+          </fieldset>
+        </form>
+        <p class="text-center">
+          Já possui uma conta?&nbsp;&nbsp;&nbsp;<a href="/login">Faça o login</a> .
+        </p>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="curso">Qual o seu curso na UFAM</label>
-      <select class="form-control" id="curso" name="id_curso" value="{{user.id_curso}}">
-        {{#each cursos}}
-        <option value="{{id}}">{{nome}}</option>
-        {{/each}}
-      </select>
-    </div>
-  <input type="hidden" name="_csrf" value="{{csrf}}">
-  <button type="submit" value="Enviar" class="bbtn btn-primary btn-lg">Criar Conta</button>
-  </fieldset>
-</form>
+  </div>
+</div>

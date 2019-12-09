@@ -7,9 +7,11 @@ const userController = require('../app/controllers/user');
 
 //mainController
 router.get('/', mainController.index);
-router.get('/about',mainController.about);
+router.get('/sobre',mainController.about);
 router.get('/socket',mainController.socket);
-
+router.get('/login',mainController.login);
+router.get('/siginup',mainController.siginup);
+router.get('/logout',mainController.logout);
 
 //areaController
 router.get('/area',areaController.index);
@@ -27,8 +29,10 @@ router.post('/curso/remove/:id',cursoController.remove);
 router.get('/user',userController.index);
 router.get('/user/create',userController.create);
 router.post('/user/create',userController.create);
-router.get('/siginup',userController.create);
-router.post('/siginup',userController.create);
+router.get('/user/siginup',userController.create);
+router.post('/user/siginup',userController.create);
+router.get('/user/login',userController.login);
+router.post('/user/login',userController.login);
 
 
 module.exports = router;

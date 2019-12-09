@@ -22,4 +22,16 @@ const siginup = (req,res)=>{
     res.redirect('user/create');
 }
 
-module.exports = { socket,index, about ,siginup}
+const login = (req,res)=>{
+    res.redirect('user/login');
+}
+const logout = (req, res) => {
+    req.session.destroy(function (err) {
+    if (err) {
+    return console.log(err);
+    }
+    res.redirect('/');
+    });
+    }
+
+module.exports = { socket,index, about ,siginup,login,logout}

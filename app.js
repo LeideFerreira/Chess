@@ -2,7 +2,8 @@ var express = require('express');
 const router = require("./config/routes");
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
-var uuid = require('uuid');
+var uid = require('uuid/v4');
+var session = require('express-session');
 
 //var consign =  require('consign');
 var app = express();
@@ -10,21 +11,38 @@ var app = express();
 // const io = require('socket.io')(http);
 
 // const PORT = process.env.PORT ||3000;
-
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(csrf({ cookie: true}));
+app.use(csrf({ cookie: true }));
+app.use(session({
+  genid: (req) => {
+    return uid() // usamos UUIDs para gerar os SESSID
+  },
+  secret: 'Hi9Cf#mK98',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(function(req,res,next){
+  res.locals.session = req.session;
+  next();
+});
 app.use(router);
+
 app.use(express.static('/public')); //pegar imagens
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-app.get('/apaga_cookie', function(req, res){
+app.get('/uuid', function (req, res) {
+  const uniqueId = uuid()
+  res.send(`UUID: ${uniqueId}`)
+})
+
+app.get('/apaga_cookie', function (req, res) {
   res.clearCookie('nome');
   res.send('cookie apagado');
-  });
+});
 
 //Handlebars ------ expbs eh a funcao handlbars do slide do profeessor
 const expbs = require('express-handlebars');
@@ -45,7 +63,6 @@ app.use('/js', [
   express.static(__dirname + '/public/js')
 ]);
 
-
 var sassMiddleware = require('node-sass-middleware');//Setup SASS directories
 var path = require('path');
 
@@ -57,9 +74,7 @@ app.use(sassMiddleware({
   prefix: '/css'
 }),
   // The static middleware must come after the sass middleware-
-  express.static(path.join(__dirname, 'public'))
-)
-
+express.static(path.join(__dirname, 'public')))
 app.listen(8080, function () {
   console.log("Express app iniciada na porta 8080.");
 });
