@@ -19,23 +19,32 @@ const read = async function (req, res) {
 const create = async (req, res) => {
     const areas = await Area.findAll();
     const token = req.csrfToken();
+
     if (req.route.methods.get) {
         res.render('curso/create',{
-            curso: req.body,
             areas: areas,
             token: token
         });
     } else {
         try {
-            await Curso.create(req.body);
-        } catch (e) {
-            res.render('curso/create', {
-                curso: req.body,
+            console.log("Ta no Try")
+            await Curso.create({
+                nome: req.body.nome,
+                sigla: req.body.sigla,
+                descricao:req.body.descricao,
                 areas: areas,
-                errors: error.errors,
+                id_area: req.body.id_area
+            });
+        } catch (e) {
+            console.log("Ta no Catch")
+            res.render('curso/create', {
+                areas: areas,
+                errors: e.errors,
                 token: token
             });
+            return;
         }
+        res.redirect('/curso');
     }
     
 };

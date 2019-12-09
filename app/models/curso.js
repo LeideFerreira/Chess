@@ -1,13 +1,22 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Curso = sequelize.define('curso', {
-    sigla: DataTypes.STRING,
+    sigla: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        len: {
+          args: [3,5],
+          msg: "Precisa conter entre 3 e 5 caracters" 
+        }
+      }
+    },
     nome: {
       type: DataTypes.STRING,
       allowNull:false,
       validate:{
         len: {
-          Args: [3,50],
+          args: [3,50],
           msg: "Precisa conter entre 3 e 50 caracters" 
         }
       }
