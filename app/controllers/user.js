@@ -23,7 +23,7 @@ const read = async function (req, res) {
 const login = async function (req, res) {
     const token = req.csrfToken();
     if (req.route.methods.get) {
-        console.log("Tá no GET");
+        //console.log("Tá no GET");
         res.render('user/login', { csrf: token });
     } else {
         var user = await User.findOne({ where: { email: req.body.email } });
@@ -53,14 +53,14 @@ const create = async (req, res) => {
     bcrypt.genSalt(1, function (err, salt) {
         bcrypt.hash(req.body.senha, salt, async (err, hash) => {
             if (req.route.methods.get) {
-                console.log("Tá no GET");
+                //console.log("Tá no GET");
                 res.render('user/create', {
                     cursos: cursos, //pra selecionar o curso
                     csrf: token
                 });
             } else {
                 try {
-                    console.log("Ta no Try");
+                    //console.log("Ta no Try");
                     await User.create({
                         nome: req.body.nome,
                         email: req.body.email,
@@ -69,7 +69,7 @@ const create = async (req, res) => {
                         id_curso: req.body.id_curso
                     });
                 } catch (e) {
-                    console.log("Ta no Catch")
+                    //console.log("Ta no Catch")
                     res.render('user/create', {
                         cursos: cursos,
                         errors: e.errors,

@@ -4,12 +4,18 @@ const mainController = require('../app/controllers/main');
 const areaController = require('../app/controllers/area');
 const cursoController = require('../app/controllers/curso');
 const userController = require('../app/controllers/user');
+const partidaController = require('../app/controllers/partida');
 
 //mainController
 router.get('/', mainController.index);
 router.get('/sobre',mainController.about);
-router.get('/socket',mainController.socket);
 router.get('/logout',mainController.logout);
+
+//partidaController
+router.get('/partida',partidaController.socket);
+router.get('/partida/socket',partidaController.socket);
+router.get('/partida/jogo', partidaController.jogo)
+router.get('/partida/:color',partidaController.jogo);
 
 //areaController
 router.get('/area',areaController.index);

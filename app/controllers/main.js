@@ -5,6 +5,7 @@ const index = (req, res) => {
         layout:'main'
     });
 };
+
 const about = (req, res) => {
     const conteudo = 'Página sobre a aplicação';
     res.render('main/about', {//dentro da view main
@@ -12,11 +13,7 @@ const about = (req, res) => {
         layout:'main'
     });
 };
-const socket = (req, res)=>{
-    res.render('main/socket',{
-        layout:''
-    })
-}
+
 const logout = (req, res) => {
     req.session.destroy(function (err) {
     if (err) {
@@ -26,4 +23,4 @@ const logout = (req, res) => {
     });
     }
 
-module.exports = { socket,index, about,logout}
+module.exports = {index, about,logout}
