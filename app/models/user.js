@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: {
-          args: [4,40],
-          msg: 'O nome precisa ter entre 4 e 40 caracteres.'
+          args: [4,100],
+          msg: 'O nome precisa ter entre 4 e 100 caracteres.'
         }
       }
     },
@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     senha: {
       type:DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [6,100],
+          msg: 'A senha precisa ter no minimo 6 caracteres.'
+        }
+      }
     },
     id_curso: DataTypes.INTEGER
   }, {

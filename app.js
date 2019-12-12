@@ -75,6 +75,6 @@ app.use(sassMiddleware({
 }),
   // The static middleware must come after the sass middleware-
 express.static(path.join(__dirname, 'public')))
-app.listen(8080, function () {
-  console.log("Express app iniciada na porta 8080.");
+app.listen(4567, function () {
+  console.log("Express app iniciada na porta 4567.");
 });

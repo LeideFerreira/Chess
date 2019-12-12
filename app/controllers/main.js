@@ -17,14 +17,6 @@ const socket = (req, res)=>{
         layout:''
     })
 }
-
-const siginup = (req,res)=>{
-    res.redirect('user/create');
-}
-
-const login = (req,res)=>{
-    res.redirect('user/login');
-}
 const logout = (req, res) => {
     req.session.destroy(function (err) {
     if (err) {
@@ -34,4 +26,4 @@ const logout = (req, res) => {
     });
     }
 
-module.exports = { socket,index, about ,siginup,login,logout}
+module.exports = { socket,index, about,logout}

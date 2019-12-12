@@ -9,8 +9,6 @@ const userController = require('../app/controllers/user');
 router.get('/', mainController.index);
 router.get('/sobre',mainController.about);
 router.get('/socket',mainController.socket);
-router.get('/login',mainController.login);
-router.get('/siginup',mainController.siginup);
 router.get('/logout',mainController.logout);
 
 //areaController
@@ -18,21 +16,27 @@ router.get('/area',areaController.index);
 
 //cursoController
 router.get('/curso',cursoController.index);
+
 router.get('/curso/read/:id',cursoController.read);
+
 router.get('/curso/create',cursoController.create);
 router.post('/curso/create',cursoController.create);
+
 router.get('/curso/update/:id',cursoController.update);
 router.post('/curso/update/:id',cursoController.update);
-router.post('/curso/remove/:id',cursoController.remove);
-
+router.post('/curso/remove',cursoController.remove);
 //userController
 router.get('/user',userController.index);
-router.get('/user/create',userController.create);
-router.post('/user/create',userController.create);
-router.get('/user/siginup',userController.create);
-router.post('/user/siginup',userController.create);
+
+router.get('/login',userController.login);
 router.get('/user/login',userController.login);
 router.post('/user/login',userController.login);
 
+router.get('/siginup',userController.create);
+router.get('/user/siginup',userController.create);
+router.post('/user/siginup',userController.create);
+
+router.get('/user/create',userController.create);
+router.post('/user/create',userController.create);
 
 module.exports = router;

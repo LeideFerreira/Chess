@@ -33,11 +33,15 @@ const login = async function (req, res) {
                     req.session.uid = user.id;
                     res.redirect('/');
                 } else {
-                    res.render('user/login', { csrf: token });
+                    if (req.body.senha != user.senha) {
+                        res.render('user/login', { erro2: 'senha invalida', csrf: token });
+                    }
                 }
             });
         } else {
-            res.redirect('/');
+            res.render('user/login', { 
+                erro1: 'email nao cadastrado', csrf: token
+            });
         }
     }
 };
@@ -46,7 +50,7 @@ const create = async (req, res) => {
     const cursos = await Curso.findAll();
     const token = req.csrfToken()
 
-    bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.genSalt(1, function (err, salt) {
         bcrypt.hash(req.body.senha, salt, async (err, hash) => {
             if (req.route.methods.get) {
                 console.log("Tá no GET");
@@ -73,7 +77,7 @@ const create = async (req, res) => {
                     });
                     return;
                 }
-                res.redirect('/user');
+                res.redirect('/login');
             }
         });
     });

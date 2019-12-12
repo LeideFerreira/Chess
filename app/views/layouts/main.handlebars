@@ -4,75 +4,72 @@
 <head>
   <meta charset="UTF-8">
   <title>My Chess App</title>
-  <link href="/css/main.css" , rel="stylesheet">
+  <link href="/css/main.css" rel="stylesheet"> 
+</head>
+
+<body>
+  <div id="header" class="navbar navbar-expand-lg  navbar-dark bg-primary">
+    <div class="container">
+      <a href="/" class="navbar-brand">
+        <h3><img class="logo" src="/img/logo.png" style="width:36px" alt="" srcset="">&nbsp; Chess App</h3>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      {{#if session.uid}}
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="/partida">Nova Partida</a></li>
+          <li class="nav-item"><a class="nav-link" href="/raking">Raking</a></li>
+          <li class="nav-item"><a class="nav-link" href="/curso">Curso</a></li>
+          <li class="nav-item"><a class="nav-link" href="/sobre">Sobre</a></li>
+          <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+        </ul>
+        {{else}}
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/sobre">Sobre</a></li>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/siginup">Sign Up</a></li>
+          </ul>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container">
+      {{{body}}}
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right"><a href="#top">Back to top</a></li>
+              <li><a href="https://blog.bootswatch.com" onclick="pageTracker._link(this.href); return false;">Blog</a>
+              </li>
+              <li><a href="https://blog.bootswatch.com/rss/">RSS</a></li>
+              <li><a href="https://twitter.com/bootswatch">Twitter</a></li>
+              <li><a href="https://github.com/thomaspark/bootswatch/">GitHub</a></li>
+              <li><a href="../help/#api">API</a></li>
+              <li><a href="../help/#donate">Donate</a></li>
+            </ul>
+            <p> Made by Leide </p>
+            <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/master/LICENSE">MIT
+                License</a>.</p>
+            <p>Based on <a href="https://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a
+                href="https://fontawesome.com/" rel="nofollow">Font Awesome</a>. Web fonts from <a
+                href="https://fonts.google.com/" rel="nofollow">Google</a>.</p>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+</body>
+{{!-- senha mysql --> Yuno1997 --}}
   <script src="/js/jquery.min.js"></script>
   <script src="/js/popper.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-</head>
-<body>
-<div id = "header" class="navbar navbar-expand-lg  navbar-dark bg-primary">
-      <div class="container">
-           <a href="/" class="navbar-brand">
-        <h3><img class="logo" src="/img/logo.png" style="width:36px" alt="" srcset="">&nbsp; Chess App</h3>
-      </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        {{#if session.uid}}
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-             <li class="nav-item">
-            <a class="nav-link" href="/sobre">Sobre</a>
-          </li>
-           <li class="nav-item">
-            <a class="nav-link" href="/curso">Cursos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-          </ul>
-        {{else}}
-         <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
 
-             <li class="nav-item">
-            <a class="nav-link" href="/sobre">{{session.uid}} Sobre</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/siginup">Sign Up</a>
-          </li>
-          </ul>
-        {{/if}}
-        </div>
-      </div>
-    </div>
-  <hr>
-  <div class="container">
-    {{{body}}}
-    <footer id="footer">
-      <div class="row">
-        <div class="col-lg-12">
-          <ul class="list-unstyled">
-            <li class="float-lg-right"><a href="#top">Back to top</a></li>
-            <li><a href="https://blog.bootswatch.com" onclick="pageTracker._link(this.href); return false;">Blog</a></li>
-            <li><a href="https://blog.bootswatch.com/rss/">RSS</a></li>
-            <li><a href="https://twitter.com/bootswatch">Twitter</a></li>
-            <li><a href="https://github.com/thomaspark/bootswatch/">GitHub</a></li>
-            <li><a href="../help/#api">API</a></li>
-            <li><a href="../help/#donate">Donate</a></li>
-          </ul>
-          <p>            Made by Leide             </p>
-          <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/master/LICENSE">MIT License</a>.</p>
-          <p>Based on <a href="https://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a href="https://fontawesome.com/" rel="nofollow">Font Awesome</a>. Web fonts from <a href="https://fonts.google.com/" rel="nofollow">Google</a>.</p>
-        </div>
-      </div>
-    </footer>
 
-  </div>
-</body>
-{{!-- senha mysql --> Yuno1997 --}}
 </html>
