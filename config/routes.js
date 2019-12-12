@@ -12,7 +12,7 @@ router.get('/sobre',mainController.about);
 router.get('/logout',mainController.logout);
 
 //partidaController
-router.get('/partida',partidaController.socket);
+router.get('/partida',partidaController.jogo);
 router.get('/partida/socket',partidaController.socket);
 router.get('/partida/jogo', partidaController.jogo)
 router.get('/partida/:color',partidaController.jogo);
