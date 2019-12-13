@@ -5,7 +5,7 @@ const index = (req, res) => {
         layout:'main'
     });
 };
-const jogo = (req, res) => {
+const game = (req, res) => {
 
   if (!req.params.color) {
 
@@ -26,4 +26,4 @@ const socket = (req, res)=>{
   })
 }
 
-module.exports = { socket,index,jogo}
+module.exports = { socket,index,game}

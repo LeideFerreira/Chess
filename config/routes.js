@@ -7,15 +7,16 @@ const userController = require('../app/controllers/user');
 const partidaController = require('../app/controllers/partida');
 
 //mainController
+
 router.get('/', mainController.index);
 router.get('/sobre',mainController.about);
 router.get('/logout',mainController.logout);
 
 //partidaController
-router.get('/partida',partidaController.jogo);
+router.get('/partida',partidaController.game);
 router.get('/partida/socket',partidaController.socket);
-router.get('/partida/jogo', partidaController.jogo)
-router.get('/partida/:color',partidaController.jogo);
+router.get('/partida/game', partidaController.game)
+router.get('/partida/:color',partidaController.game);
 
 //areaController
 router.get('/area',areaController.index);

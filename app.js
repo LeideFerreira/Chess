@@ -4,11 +4,11 @@ const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 var uid = require('uuid/v4');
 var session = require('express-session');
+
 var app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const PORT = process.env.PORT || 4567;
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(csrf({ cookie: true }));
@@ -26,32 +26,55 @@ app.use(function (req, res, next) {
   res.locals.session = req.session;
   next();
 });
+// --------------------------- socket -------------->
+var players = 0;
 
-io.on('connect', (client) => {
-  console.log("usuario conectado");
-  const uid = client.id.substr(0,4);
-  var sala = 1;
-  client.join(sala);
-
-  client.on('oi', (oi) => {
-    console.log(oi);
-    client.emit('oi', 'Você disse: ' + oi);
-    client.to(sala).broadcast.emit('oi', 'O usuário ' + uid + ' disse: ' + oi);
+io.on('connect', function (socket) {
+  const playerId = socket.id.substr(0, 4);
+  var sala;
+  console.log("Servidor---->  usuario conectado player: ", playerId);
+  
+  socket.on('joined', function (sala) {
+    console.log("Servidor---->  joined");
+    if (players < 2) {
+      players++; //bota jogador
+    } else {
+      socket.emit('full', sala); //sala cheia
+      return;
+    }
+    console.log("Servidor: Jogadores na sala: ",players);
+    socket.emit('player', { playerId, players, sala});//iniciar tabuleiro
   });
 
-  client.on('mudarSala', (s) => {
-    sala = s;
-    client.leaveAll();
-    client.join(sala);
+
+  socket.on('move',  (msg) =>{
+    socket.broadcast.emit('move', msg);
+  });
+
+  socket.on('play',  (msg) =>{
+    socket.broadcast.emit('play', msg);
+    console.log("Servidor----> ready " + msg);
+  });
+
+  socket.on('disconnect',  () =>{
+    if(players > 0){
+      players--;
+    }
+
+    console.log("Servidor----> "+ playerId + ' se  desconectou');
+    console.log("Servidor----> Jogadores na sala: ",players);
   });
 });
 
+// --------------------------- socket -------------->
+const PORT = process.env.PORT || 4567;
 app.use(router);
 app.use(express.static('/public')); //pegar imagens
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
 app.get('/uuid', function (req, res) {
   const uniqueId = uuid()
   res.send(`UUID: ${uniqueId}`)
@@ -93,7 +116,7 @@ var sassMiddleware = require('node-sass-middleware');//Setup SASS directories
 var path = require('path');
 
 app.use(sassMiddleware({
-  src: __dirname + '/public/scss', 
+  src: __dirname + '/public/scss',
   dest: __dirname + '/public/css',
   debug: true,
   outputStyle: 'compressed',

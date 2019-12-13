@@ -8,11 +8,12 @@
 </div>
 
 <script>
-    const socket = io()
+    const socket = io();
     const botao = document.getElementById('botao');
     const msgs = document.getElementById('msgs');
     botao.onclick = () => {
         socket.emit('oi','Oi!');
+        console.log("CLiete ");
     };
     socket.on('connect', () => {
         document.title = socket.id.substr(0,4);

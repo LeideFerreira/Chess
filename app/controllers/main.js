@@ -1,9 +1,16 @@
+
 const index = (req, res) => {
     const conteudo = 'Página principal da aplicação';
-    res.render('main/index', {
-        conteudo: conteudo,
-        layout:'main'
-    });
+    //console.log(req.session);
+    if(req.session.uid){
+        res.render('main/index', {
+            conteudo: conteudo,
+            layout:'main'
+        });
+    }else{
+        res.redirect('/login');
+    }
+    
 };
 
 const about = (req, res) => {

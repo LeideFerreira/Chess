@@ -1,68 +1,125 @@
-<div class="row ml-1 mt-4">
-  <div class="col">
-    <div id="board" style="width: 500px"></div>
-    <div id="status">A vez é do jogador <b>branco</b>.</div>
+<div class="container">
+  <div style="margin: auto">
+    <div class="col">
+      <button id="button" class="btn btn-success" onclick="connect()">Connect</button>
+    </div>
+    <div id="board" style="width: 500px; margin: auto"></div>
+    <div id="player"></div>
+    <div id="status">Join Game</div>
   </div>
 </div>
 
 <script>
- const socket = io();
-  const game = new Chess();
+  var game = new Chess();
+  const socket = io();
   const color = '{{color}}';
   const fen = 'start';
-  const partida = {{partida}};
+  const partida = {{ partida }};
+  const botao = document.getElementById('botao');
 
   game.load(fen); // fen é a posição das peças no tabuleiro
 
-  const board = Chessboard('board', {
-    draggable: true,
-    orientation: (color == 'w') ? 'white' : 'black',
-    position: fen,
-    moveSpeed: 'slow',
-    pieceTheme: '/img/chesspieces/wikipedia/{piece}.png',
-    onDragStart: onDragStart, // quando o usuário pega a peça, para começar seu movimento
-    onDrop: onDrop, // quando o usuário solta a peça, para encerrar seu movimento
-    onSnapEnd: onSnapEnd // quando um jogador come a peça do outro, ou quando o peao chega no topo do campo do outro
-  });
+  var salaId = 1;
+  var players;
+  var play = false;
 
-  function onDragStart(source, piece, position, orientation) {
+  var state = document.getElementById('status');
 
-    // nao permitir o movimento de peças em caso de game over
-    if (game.game_over()) return false;
-
-    // permitir apenas o movimento de peças de sua própria cor
-    if ((color === 'w' && piece.search(/^b/) !== -1) ||
-      (color === 'b' && piece.search(/^w/) !== -1)) {
-      return false
-    }
-
-    // o jogador só pode mover peças caso seja sua vez de jogar
-    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-      return false
-    }
+  // -----q------socket ------->  
+    function connect() {
+    console.log("Cliente----> Connect executando sala: ", salaId);
+    socket.emit('joined', salaId);
   }
 
-  function onDrop(source, target) {
+  socket.on('full',  (msg) => {
+    console.log("Cliente----> sala Cheia");
+  });
 
-    // verificar se o movimento feito é legal de acordo com as regras de xadrez
+  socket.on('play',  (msg) => {
+    if (msg == salaId) {
+      play = true;
+      state.innerHTML = "Game in progress"
+    }
+    // console.log(mCliente----> sg)
+  });
+  socket.on('move',  (msg) => {
+    game.move(msg.move);
+    board.position(game.fen());
+    console.log("Cliente----> moved")
+  });
+  // --------------------------- /socket ------->
+  var removeGreySquares = function () {
+    $('#board .square-55d63').css('background', '');
+  };
+
+  var greySquare = function (square) {
+    var squareEl = $('#board .square-' + square);
+    var background = '#a9a9a9';
+    if (squareEl.hasClass('black-3c85d') === true) {
+      background = '#696969';
+    }
+    squareEl.css('background', background);
+  };
+
+  var onDragStart = function (source, piece) {
+
+    if (game.game_over() === true || play ||
+      (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+      (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+      (game.turn() === 'w' && color === 'black') ||
+      (game.turn() === 'b' && color === 'white')) {
+      return false;
+    }
+  };
+
+  var onDrop = function (source, target) {
+    removeGreySquares();
     var move = game.move({
       from: source,
       to: target,
-      promotion: 'q' // NOTA: Para manter a simplicidade, peões só poderão ser promovidos para rainhas
+      promotion: 'q'
     });
 
-    // movimento ilegal, vamos retroceder a peça para a posição original
-    if (move === null) return 'snapback'
+    if (game.game_over()) {
+      state.innerHTML = 'GAME OVER';
+      socket.emit('gameOver', salaId);
+    }
 
-    // **** Usar SOCKET.IO para enviar o movimento para o adversário **** // 
+    if (move === null) {
+      return 'snapback';
+    } else {
+      socket.emit('move', {
+        move: move, board: game.fen(), sala: salaId
+      });
+    }
+  };
 
-    updateStatus();
-  }
+  var onMouseoverSquare = function (square, piece) {
+    // get list of possible moves for this square
+    var moves = game.moves({
+      square: square,
+      verbose: true
+    });
 
-  function onSnapEnd() {
-    board.position(game.fen())
-  }
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return;
+
+    // highlight the square they moused over
+    greySquare(square);
+
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+      greySquare(moves[i].to);
+    }
+  };
+
+  var onMouseoutSquare = function (square, piece) {
+    removeGreySquares();
+  };
+
+  var onSnapEnd = function () {
+    board.position(game.fen());
+  };
 
   function updateStatus() {
     var status = ''
@@ -81,7 +138,6 @@
     else if (game.in_draw()) {
       status = 'O jogo empatou!'
     }
-
     // o jogo continua
     else {
       status = 'A vez é do jogador ' + moveColor + '.'
@@ -95,4 +151,31 @@
     document.getElementById('status').innerHTML = status;
   }
 
+  socket.on('player', (players) => {
+    console.log("Cliente : socket player");
+    var plno = document.getElementById("player");
+
+    if (players == 2) {
+      play = true;
+      socket.emit('play', salaId);
+      //state.innerHTML = "Game in Progress";
+      console.log("Game in progress");
+    } else {
+      console.log("Esperando segundo jogador");
+    }
+    var cfg = {
+      orientation: (color == 'w') ? 'white' : 'black',
+      draggable: true,
+      position: fen,
+      onDragStart: onDragStart,
+      onDrop: onDrop,
+      moveSpeed: 'slow',
+      pieceTheme: '/img/chesspieces/wikipedia/{piece}.png',
+      onMouseoutSquare: onMouseoutSquare,
+      onMouseoverSquare: onMouseoverSquare,
+      onSnapEnd: onSnapEnd
+    };
+    board = Chessboard('board', cfg);
+  });
+  var board;
 </script>
