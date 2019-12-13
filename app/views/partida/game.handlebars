@@ -1,51 +1,49 @@
 <div class="container">
   <div style="margin: auto">
     <div class="col">
-      <button id="button" class="btn btn-success" onclick="connect()">Connect</button>
+       <div id = "titulo"> 
+        <p class="lead"> Clique em "Entrar" para começar a jogar</p>
+         <p>obs:Primeiro jogador começa com as peças brancas</p>
+       </div>      
+       <button id="button" class="btn btn-success" onclick="connect()">Entrar</button>
     </div>
     <div id="board" style="width: 500px; margin: auto"></div>
-    <div id="player"></div>
-    <div id="status">Join Game</div>
+    <div id="status" style="width: 500px; margin: auto">Bem-vindo, vez do jogador Branco.</div>
   </div>
 </div>
 
 <script>
   var game = new Chess();
   const socket = io();
-  const color = '{{color}}';
+  const color = 'w';
   const fen = 'start';
-  const partida = {{ partida }};
-  const botao = document.getElementById('botao');
+  const botao = document.getElementById('button');
+   const titulo = document.getElementById('titulo');
 
   game.load(fen); // fen é a posição das peças no tabuleiro
 
   var salaId = 1;
-  var players;
-  var play = false;
+  var players; //quantidade de jogadores on
+  var play = true;
 
-  var state = document.getElementById('status');
-
-  // -----q------socket ------->  
-    function connect() {
-    console.log("Cliente----> Connect executando sala: ", salaId);
-    socket.emit('joined', salaId);
+  // -----------socket  cliente ------->  
+  function connect() {
+    botao.remove(); //remover o botao da view
+    titulo.remove();
+    socket.emit('joined', salaId); //enviar pro servidor
   }
 
-  socket.on('full',  (msg) => {
-    console.log("Cliente----> sala Cheia");
+  socket.on('full', (msg) => {//caso um terceiro queira entrar
+    console.log("Sala Cheia");
   });
 
-  socket.on('play',  (msg) => {
-    if (msg == salaId) {
+  socket.on('play', () => {
       play = true;
-      state.innerHTML = "Game in progress"
-    }
-    // console.log(mCliente----> sg)
   });
-  socket.on('move',  (msg) => {
+
+  socket.on('move', (msg) => {
     game.move(msg.move);
     board.position(game.fen());
-    console.log("Cliente----> moved")
   });
   // --------------------------- /socket ------->
   var removeGreySquares = function () {
@@ -62,13 +60,23 @@
   };
 
   var onDragStart = function (source, piece) {
+    // nao permitir o movimento de peças em caso de game over
+    if (game.game_over()) return false;
 
-    if (game.game_over() === true || play ||
-      (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
-      (game.turn() === 'w' && color === 'black') ||
-      (game.turn() === 'b' && color === 'white')) {
-      return false;
+    if (play) {
+      // permitir apenas o movimento de peças de sua própria cor
+      if ((color === 'w' && piece.search(/^b/) !== -1) ||
+        (color === 'b' && piece.search(/^w/) !== -1)) {
+        return false
+      }
+
+      // o jogador só pode mover peças caso seja sua vez de jogar
+      if((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+        (game.turn() === 'w' && color === 'black') ||
+        (game.turn() === 'b' && color === 'white')) {
+        return false;
+      }
     }
   };
 
@@ -81,30 +89,30 @@
     });
 
     if (game.game_over()) {
-      state.innerHTML = 'GAME OVER';
+      status.innerHTML = 'GAME OVER';
       socket.emit('gameOver', salaId);
     }
 
-    if (move === null) {
+    if (move === null) {  // movimento ilegal, vamos retroceder a peça para a posição original
+
       return 'snapback';
     } else {
       socket.emit('move', {
         move: move, board: game.fen(), sala: salaId
       });
     }
+    updateStatus();
   };
 
   var onMouseoverSquare = function (square, piece) {
-    // get list of possible moves for this square
+    // pegar lista de possiveis movimentos
     var moves = game.moves({
       square: square,
       verbose: true
     });
 
-    // exit if there are no moves available for this square
     if (moves.length === 0) return;
 
-    // highlight the square they moused over
     greySquare(square);
 
     // highlight the possible squares for this piece
@@ -138,6 +146,7 @@
     else if (game.in_draw()) {
       status = 'O jogo empatou!'
     }
+
     // o jogo continua
     else {
       status = 'A vez é do jogador ' + moveColor + '.'
@@ -151,20 +160,21 @@
     document.getElementById('status').innerHTML = status;
   }
 
-  socket.on('player', (players) => {
+  socket.on('player', (playId, players, color) => {
     console.log("Cliente : socket player");
-    var plno = document.getElementById("player");
+    players = players;
+    color = color;
 
     if (players == 2) {
-      play = true;
-      socket.emit('play', salaId);
-      //state.innerHTML = "Game in Progress";
+      play = false;
+      socket.emit('play');
+      status.innerHTML = "Game in Progress";
       console.log("Game in progress");
     } else {
       console.log("Esperando segundo jogador");
     }
     var cfg = {
-      orientation: (color == 'w') ? 'white' : 'black',
+      orientation: color,
       draggable: true,
       position: fen,
       onDragStart: onDragStart,

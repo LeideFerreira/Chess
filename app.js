@@ -35,15 +35,23 @@ io.on('connect', function (socket) {
   console.log("Servidor---->  usuario conectado player: ", playerId);
   
   socket.on('joined', function (sala) {
-    console.log("Servidor---->  joined");
     if (players < 2) {
       players++; //bota jogador
     } else {
       socket.emit('full', sala); //sala cheia
       return;
     }
+    //escolher cor da peça jogador
+    if(players > 0){
+      if(players === 1){//primeiro jogador pega sempre a cor branca
+        color = 'white';
+      }  else{
+        color = 'black';
+      }
+    }
+    
     console.log("Servidor: Jogadores na sala: ",players);
-    socket.emit('player', { playerId, players, sala});//iniciar tabuleiro
+    socket.emit('player',playerId,players,color);//iniciar tabuleiro
   });
 
 
@@ -51,9 +59,8 @@ io.on('connect', function (socket) {
     socket.broadcast.emit('move', msg);
   });
 
-  socket.on('play',  (msg) =>{
-    socket.broadcast.emit('play', msg);
-    console.log("Servidor----> ready " + msg);
+  socket.on('play',  () =>{
+    socket.broadcast.emit('play');
   });
 
   socket.on('disconnect',  () =>{

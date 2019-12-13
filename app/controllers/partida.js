@@ -6,19 +6,7 @@ const index = (req, res) => {
     });
 };
 const game = (req, res) => {
-
-  if (!req.params.color) {
-
-    res.render('partida/choosecolor');
-
-  } else {
-
-    res.render('partida/game', {
-      color: req.params.color,      
-      partida: 1
-    });
-    
-  }  
+    res.render('partida/game');
 }
 const socket = (req, res)=>{
   res.render('partida/socket',{
